@@ -1,8 +1,10 @@
 package com.nosto.api.controller;
 
+import com.nosto.api.dtos.ExchangeResponse;
 import com.nosto.api.service.ExchangeService;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +21,15 @@ public class CurrencyExchangeController {
 
     @GetMapping(value = "/exchange/from/{fromCcy}/to/{toCcy}/value/{value}",
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getBankStatement (@PathVariable("fromCcy") String fromCcy,
+    public ResponseEntity getExchangeValue (@PathVariable("fromCcy") String fromCcy,
                                             @PathVariable("toCcy") String toCcy,
                                             @PathVariable("value") double value) {
         try {
-            return new ResponseEntity<>(service.exchangeCurrencyValue(fromCcy, toCcy, value), HttpStatus.OK);
+            ExchangeResponse exchangeResponse = service.exchangeCurrencyValue(fromCcy, toCcy, value);
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("Server-Timing",
+                    "app;dur=" + exchangeResponse.getTimeElapsed());
+            return ResponseEntity.ok().headers(responseHeaders).body(exchangeResponse.getConvertedValueFormat());
         } catch (IllegalArgumentException ex) {
             log.info(ex.getMessage());
             return new ResponseEntity<>(ex.getMessage(),HttpStatus.BAD_REQUEST);
