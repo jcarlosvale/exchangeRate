@@ -12,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The main controller exposing the endpoint /exchange/from/{fromCcy}/to/{toCcy}/value/{value}
+ */
 @RestController
 @AllArgsConstructor
 @Log
@@ -27,8 +30,7 @@ public class CurrencyExchangeController {
         try {
             ExchangeResponse exchangeResponse = service.exchangeCurrencyValue(fromCcy, toCcy, value);
             HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("Server-Timing",
-                    "app;dur=" + exchangeResponse.getTimeElapsed());
+            responseHeaders.set("Server-Timing", "app;dur=" + exchangeResponse.getTimeElapsed());
             return ResponseEntity.ok().headers(responseHeaders).body(exchangeResponse.getConvertedValueFormat());
         } catch (IllegalArgumentException ex) {
             log.info(ex.getMessage());
@@ -39,11 +41,4 @@ public class CurrencyExchangeController {
                     HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-    @GetMapping(value = "/ping",
-            produces = MediaType.APPLICATION_JSON_VALUE)
-    public String ping () {
-        return "ok";
-    }
-
 }
