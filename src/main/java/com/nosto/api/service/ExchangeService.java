@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ExchangeService {
 
-    private final ForeignExchangeRestClient foreignExchangeRestClient;
+    final ForeignExchangeRestClient foreignExchangeRestClient;
 
     /**
      *
@@ -25,6 +25,8 @@ public class ExchangeService {
      * @return the Response of processing with the i118n String and the time elapsed in the processing
      */
     public ExchangeResponse exchangeCurrencyValue(@NonNull String fromCcy, @NonNull String toCcy, @NonNull Double value) {
+        fromCcy = fromCcy.toUpperCase();
+        toCcy = toCcy.toUpperCase();
         long before = System.currentTimeMillis();
         ExchangeRateApiResponse exchangeRateApiResponse = foreignExchangeRestClient.getExchangeRate(fromCcy, toCcy);
         double convertedValue = value * exchangeRateApiResponse.getCurrencyRate(toCcy);

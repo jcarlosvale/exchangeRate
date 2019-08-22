@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="https://npmcdn.com/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.1"></script>
+</head>
+<body>
+    <div id="app">
+        <form action="">
+          Source: <input
+            type="text"
+            id="sourceCurrency"
+            v-model="sourceCurrency">
+          Target: <input
+            type="text"
+            id="targetCurrency"
+            v-model="targetCurrency">
+          Value: <input
+            type="text"
+            id="value"
+            v-model="value">
+          <br><br>
+          <button @click.prevent="submit">Submit!</button>
+          <br><br>
+        </form>
+        Result: {{ result }}
+    </div>
+<script src="app.js"></script>
+</body>
+</html>

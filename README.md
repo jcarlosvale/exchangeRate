@@ -41,6 +41,10 @@ The used endpoint from ExchangeRatesApi: https://api.exchangeratesapi.io/latest?
 ```
 http://localhost:8080/exchange/from/BRL/to/JPY/value/10
 ```
+or (web interface)
+```
+http://localhost:8080
+``` 
 
 * Output
 
@@ -69,13 +73,13 @@ https://api.exchangeratesapi.io/latest?base=BRL&symbols=EUR
 
 ## Commands:
 
-To generate JAR:
-
-    mvn clean package
-
 To run:
 
-    java -jar target/currencyExchange-0.0.1.jar
+    mvn spring-boot:run
+    
+Using the web interface
+    
+    http://localhost:8080
     
 To run tests:
 
