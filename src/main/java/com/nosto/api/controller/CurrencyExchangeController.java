@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import static org.springframework.http.MediaType.TEXT_PLAIN_VALUE;
+
 /**
  * The main controller exposing the endpoint /exchange/from/{fromCcy}/to/{toCcy}/value/{value}
  */
@@ -26,7 +28,7 @@ public class CurrencyExchangeController {
 
     @CrossOrigin(origins = "*")
     @GetMapping(value = "/exchange/from/{fromCcy}/to/{toCcy}/value/{value}",
-            produces = MediaType.APPLICATION_JSON_VALUE)
+            produces = TEXT_PLAIN_VALUE)
     public ResponseEntity getExchangeValue (@PathVariable("fromCcy") String fromCcy,
                                             @PathVariable("toCcy") String toCcy,
                                             @PathVariable("value") double value) {

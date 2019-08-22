@@ -80,7 +80,3 @@ To run:
 Using the web interface
     
     http://localhost:8080
-    
-To run tests:
-
-    mvn test

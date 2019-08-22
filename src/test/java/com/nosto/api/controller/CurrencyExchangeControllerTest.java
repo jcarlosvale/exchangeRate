@@ -1,7 +1,6 @@
 package com.nosto.api.controller;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,8 +13,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
-import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,7 +29,7 @@ public class CurrencyExchangeControllerTest {
     @Test
     public void testExchange() {
         String fromCcy = "BRL";
-        String toCcy = "EUR";
+        String toCcy = "USD";
         String value = "10";
         stubFor(get(urlPathMatching("https://api.exchangeratesapi.io/latest?base="+fromCcy+"&symbols="+toCcy))
                 .willReturn(aResponse()
@@ -44,7 +43,7 @@ public class CurrencyExchangeControllerTest {
 
         assertEquals(HttpStatus.OK, actualResponse.getStatusCode());
         assertNotNull(actualResponse.getHeaders().get("Server-Timing").get(0));
-        assertEquals("2,24 €", actualResponse.getBody());
+        assertEquals("$2.48", actualResponse.getBody());
     }
 
     @Test(expected = HttpClientErrorException.BadRequest.class)
