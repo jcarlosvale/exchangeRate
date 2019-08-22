@@ -2,6 +2,7 @@ package com.nosto.api.controller;
 
 import com.nosto.api.dtos.ExchangeResponse;
 import com.nosto.api.service.ExchangeService;
+import com.sun.javaws.exceptions.InvalidArgumentException;
 import feign.FeignException;
 import lombok.AllArgsConstructor;
 import lombok.extern.java.Log;
@@ -37,6 +38,9 @@ public class CurrencyExchangeController {
             HttpHeaders responseHeaders = new HttpHeaders();
             responseHeaders.set("Server-Timing", "app;dur=" + exchangeResponse.getTimeElapsed());
             return ResponseEntity.ok().headers(responseHeaders).body(exchangeResponse.getConvertedValueFormat());
+        } catch (IllegalArgumentException e) {
+            log.info(e.getMessage());
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         } catch (FeignException e) {
             return new ResponseEntity<>(null, HttpStatus.valueOf(e.status()));
         } catch (Exception e) {

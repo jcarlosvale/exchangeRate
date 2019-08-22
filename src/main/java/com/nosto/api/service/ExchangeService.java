@@ -25,6 +25,7 @@ public class ExchangeService {
      * @return the Response of processing with the i118n String and the time elapsed in the processing
      */
     public ExchangeResponse exchangeCurrencyValue(@NonNull String fromCcy, @NonNull String toCcy, @NonNull Double value) {
+        validate(value);
         fromCcy = fromCcy.toUpperCase();
         toCcy = toCcy.toUpperCase();
         long before = System.currentTimeMillis();
@@ -32,5 +33,11 @@ public class ExchangeService {
         double convertedValue = value * exchangeRateApiResponse.getCurrencyRate(toCcy);
         String convertedValueFormat = Util.formatValue(convertedValue, toCcy);
         return new ExchangeResponse(convertedValueFormat, System.currentTimeMillis() - before);
+    }
+
+    private void validate(double value) {
+        if (value <= 0)  {
+            throw new IllegalArgumentException("Negative value.");
+        }
     }
 }

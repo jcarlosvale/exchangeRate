@@ -58,9 +58,22 @@ public class CurrencyExchangeControllerTest {
 
         String url = "http://localhost:"+randomServerPort+"/exchange/from/XXX/to/"+toCcy+"/value/"+value;
 
-        ResponseEntity<String> actualResponse =
-                new RestTemplate().getForEntity(url, String.class);
+        new RestTemplate().getForEntity(url, String.class);
+    }
 
+    @Test(expected = HttpClientErrorException.BadRequest.class)
+    public void testInvalidValue() {
+        String fromCcy = "BRL";
+        String toCcy = "EUR";
+        String value = "-10";
+        stubFor(get(urlPathMatching("https://api.exchangeratesapi.io/latest?base="+fromCcy+"&symbols="+toCcy))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withBody(getJson())));
+
+        String url = "http://localhost:"+randomServerPort+"/exchange/from/"+fromCcy+"/to/"+toCcy+"/value/"+value;
+
+        new RestTemplate().getForEntity(url, String.class);
     }
 
     private String getJson() {
